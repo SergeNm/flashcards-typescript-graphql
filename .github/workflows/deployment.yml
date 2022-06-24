@@ -1,0 +1,31 @@
+name: deploy-flashcards-app-heroku                       # 1
+
+on:
+  push:
+    branches:                                            # 2
+      - master
+      - main
+
+jobs:  
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2                        # 3
+      - run: yarn install                                      # 4
+      - name: Run production migration                   
+        run: yarn migrate:deploy                      # 5     
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      - uses: akhileshns/heroku-deploy@v3.12.12          # 6
+        with:
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
+          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+
+
+# 1: The name keyword defines the name of the workflow.
+# 2: on is used to define which events will trigger the workflow to run automatically. In this case, it will run on a push to the main or master remote branch.
+# 3: The uses keyword specifies that this step will run v2 of the actions/checkout action. This action checks-out your repository to the runner so your workflow can access it.
+# 4: The run keyword is used to execute any arbitrary shell command on the runner. In this case, you are using npm ci which is similar to npm install, but more suitable for automated environments. Details are available on the npm docs
+# 5: The runner will execute the migrate:deploy npm script. This is to synchronize any database changes to the production database. The env property provides the database connection string to the runner.
+# 6: This command uses the heroku-deploy@v3.12.12 action to deploy the final code to Heroku. The with keyword is used to pass certain parameters to the action.
