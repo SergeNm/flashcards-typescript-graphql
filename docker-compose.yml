@@ -4,21 +4,16 @@ services:
   # Docker connection string for local machine: postgres://postgres:postgres@localhost:5432/
 
   postgres:
-    image: postgres:13.5    # 1
+    image: postgres:13.6   
     restart: always
-    environment:            # 2
+    environment:            
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
-    volumes:                # 3
+    volumes:                
       - postgres:/var/lib/postgresql/data
     ports:
-      - '5432:5432'         # 4
+      - '5432:5432'         
 
 volumes:
   postgres:
-
-
-# 1: The image option defines what Docker image to use.
-# 2: The environment option specifies the environment variables passed to the container during initialization. You can define the configuration options and secrets – such as the username and password – the container will use here.
-# 3: The volumes option is used for persisting data in the host file system.
-# 4: The ports option maps ports from the host machine to the container. The format follows the convention of “host_port:container_port”. In this case, you are mapping the port 5432 of the host machine to port 5432 of the postgres container. 5432 is conventionally the port used by PostgreSQL.
+  

@@ -71,7 +71,6 @@ export interface NexusGenObjects {
     email: string; // String!
     id: number; // Int!
     name: string; // String!
-    password?: string | null; // String
   }
   Vote: { // root type
     link: NexusGenRootTypes['Link']; // Link!
@@ -121,7 +120,6 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     links: NexusGenRootTypes['Link'][]; // [Link!]!
     name: string; // String!
-    password: string | null; // String
     votes: NexusGenRootTypes['Link'][]; // [Link!]!
   }
   Vote: { // field return type
@@ -162,7 +160,6 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     links: 'Link'
     name: 'String'
-    password: 'String'
     votes: 'Link'
   }
   Vote: { // field return type name

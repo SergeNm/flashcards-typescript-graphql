@@ -54,7 +54,6 @@ type User {
   id: Int!
   links: [Link!]!
   name: String!
-  password: String
   votes: [Link!]!
 }
 
