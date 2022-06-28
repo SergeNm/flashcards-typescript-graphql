@@ -7,6 +7,12 @@ type AuthPayload {
   user: User!
 }
 
+type Category {
+  flashCards: [FlashCard]
+  id: Int!
+  name: String!
+}
+
 """
 A date-time string at UTC, such as 2007-12-03T10:15:30Z, compliant with the `date-time` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
 """
@@ -18,13 +24,37 @@ type Feed {
   links: [Link!]!
 }
 
+type FlashCard {
+  answer: String!
+  category: Category
+  categoryId: Int!
+  createdAt: DateTime!
+  createdBy: User
+  hardness: String!
+  id: Int!
+  question: String!
+  readers: [User!]!
+  title: String!
+}
+
+input FlashcardOrderByInput {
+  createdAt: Sort
+  hardness: Sort
+  title: Sort
+}
+
+type Flip {
+  link: Link!
+  user: User!
+}
+
 type Link {
   createdAt: DateTime!
   description: String!
+  flipers: [User!]!
   id: Int!
   postedBy: User
   url: String!
-  voters: [User!]!
 }
 
 input LinkOrderByInput {
@@ -34,14 +64,24 @@ input LinkOrderByInput {
 }
 
 type Mutation {
+  createCategory(name: String!): Category
+  createFlashCard(answer: String!, categoryId: Int!, hardness: String, question: String!, title: String!): FlashCard!
+  flip(linkId: Int!): Flip
   login(email: String!, password: String!): AuthPayload!
   post(description: String!, url: String!): Link!
+  read(flashCardId: Int!): Read
   signup(email: String!, name: String!, password: String!): AuthPayload!
-  vote(linkId: Int!): Vote
 }
 
 type Query {
+  categories: [Category!]!
   feed(filter: String, orderBy: [LinkOrderByInput!], skip: Int, take: Int): Feed!
+  flashCards(orderBy: [FlashcardOrderByInput!]): [FlashCard]
+}
+
+type Read {
+  flashCard: FlashCard!
+  user: User!
 }
 
 enum Sort {
@@ -51,13 +91,8 @@ enum Sort {
 
 type User {
   email: String!
+  flips: [Link!]!
   id: Int!
   links: [Link!]!
   name: String!
-  votes: [Link!]!
-}
-
-type Vote {
-  link: Link!
-  user: User!
 }

@@ -1,19 +1,19 @@
 import { objectType, extendType, nonNull, intArg } from "nexus";
 import { User } from "@prisma/client";
 
-export const Vote = objectType({
-    name: "Vote",
+export const Flip = objectType({
+    name: "Flip",
     definition(t) {
         t.nonNull.field("link", { type: "Link" });
         t.nonNull.field("user", { type: "User" });
     },
 });
 
-export const VoteMutation = extendType({
+export const FlipMutation = extendType({
     type: "Mutation",
     definition(t) {
-        t.field("vote", {
-            type: "Vote",
+        t.field("flip", {
+            type: "Flip",
             args: {
                 linkId: nonNull(intArg()),
             },
@@ -22,7 +22,7 @@ export const VoteMutation = extendType({
                 const { linkId } = args;
 
                 if (!userId) {
-                    throw new Error("Cannot vote without logging in.");
+                    throw new Error("Cannot flip without logging in.");
                 }
 
                 const link = await context.prisma.link.update({
@@ -30,7 +30,7 @@ export const VoteMutation = extendType({
                         id: linkId,
                     },
                     data: {
-                        voters: {
+                        flipers: {
                             connect: {
                                 id: userId,
                             },

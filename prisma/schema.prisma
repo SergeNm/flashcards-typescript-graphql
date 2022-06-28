@@ -1,6 +1,6 @@
 datasource db {
-  provider = "postgresql" 
-  url      = env("DATABASE_URL") 
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
@@ -8,20 +8,48 @@ generator client {
 }
 
 model Link {
-  id          Int      @id @default(autoincrement()) 
+  id          Int      @id @default(autoincrement())
   createdAt   DateTime @default(now())
   description String
   url         String
   postedBy    User?    @relation(name: "foobar", fields: [postedById], references: [id])
   postedById  Int?
-  voters      User[]   @relation(name: "Votes")
+  flipers      User[]   @relation(name: "Flips")
 }
 
 model User {
-  id       Int    @id @default(autoincrement())
-  name     String
-  email    String @unique
-  password String
-  links    Link[] @relation(name: "foobar")
-  votes    Link[] @relation(name: "Votes")
+  id         Int         @id @default(autoincrement())
+  name       String
+  email      String      @unique
+  password   String
+  links      Link[]      @relation(name: "foobar")
+  flips      Link[]      @relation(name: "Flips")
+  reads      FlashCard[] @relation(name: "Reads")
+  flashCards FlashCard[] @relation(name: "creator")
+}
+
+model Category {
+  id         Int         @id @default(autoincrement())
+  name       String
+  flashCards FlashCard[] @relation(name: "category")
+}
+
+model FlashCard {
+  id          Int      @id @default(autoincrement())
+  hardness    Hardness @default(EASY)
+  title       String
+  question    String
+  answer      String
+  createdAt   DateTime @default(now())
+  createdBy   User     @relation(name: "creator", fields: [createdById], references: [id])
+  category    Category @relation(name: "category", fields: [categoryId], references: [id])
+  readers     User[]   @relation(name: "Reads")
+  categoryId  Int
+  createdById Int
+}
+
+enum Hardness {
+  EASY
+  FAIR
+  HARD
 }

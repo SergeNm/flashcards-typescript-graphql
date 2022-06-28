@@ -26,12 +26,12 @@ export const Link = objectType({
                     .postedBy();
             },
         });
-        t.nonNull.list.nonNull.field("voters", {
+        t.nonNull.list.nonNull.field("flipers", {
             type: "User",
             resolve(parent, args, context) {
                 return context.prisma.link
                     .findUnique({ where: { id: parent.id } })
-                    .voters();
+                    .flipers();
             },
         });
     },

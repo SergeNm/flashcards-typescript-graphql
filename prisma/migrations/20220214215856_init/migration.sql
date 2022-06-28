@@ -20,7 +20,7 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "_Votes" (
+CREATE TABLE "_Flips" (
     "A" INTEGER NOT NULL,
     "B" INTEGER NOT NULL
 );
@@ -29,16 +29,16 @@ CREATE TABLE "_Votes" (
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "_Votes_AB_unique" ON "_Votes"("A", "B");
+CREATE UNIQUE INDEX "_Flips_AB_unique" ON "_Flips"("A", "B");
 
 -- CreateIndex
-CREATE INDEX "_Votes_B_index" ON "_Votes"("B");
+CREATE INDEX "_Flips_B_index" ON "_Flips"("B");
 
 -- AddForeignKey
 ALTER TABLE "Link" ADD CONSTRAINT "Link_postedById_fkey" FOREIGN KEY ("postedById") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_Votes" ADD FOREIGN KEY ("A") REFERENCES "Link"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_Flips" ADD FOREIGN KEY ("A") REFERENCES "Link"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_Votes" ADD FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_Flips" ADD FOREIGN KEY ("B") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;

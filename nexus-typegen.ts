@@ -29,6 +29,11 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  FlashcardOrderByInput: { // input type
+    createdAt?: NexusGenEnums['Sort'] | null; // Sort
+    hardness?: NexusGenEnums['Sort'] | null; // Sort
+    title?: NexusGenEnums['Sort'] | null; // Sort
+  }
   LinkOrderByInput: { // input type
     createdAt?: NexusGenEnums['Sort'] | null; // Sort
     description?: NexusGenEnums['Sort'] | null; // Sort
@@ -54,10 +59,28 @@ export interface NexusGenObjects {
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
+  Category: { // root type
+    flashCards?: Array<NexusGenRootTypes['FlashCard'] | null> | null; // [FlashCard]
+    id: number; // Int!
+    name: string; // String!
+  }
   Feed: { // root type
     count: number; // Int!
     id?: string | null; // ID
     links: NexusGenRootTypes['Link'][]; // [Link!]!
+  }
+  FlashCard: { // root type
+    answer: string; // String!
+    categoryId: number; // Int!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    hardness: string; // String!
+    id: number; // Int!
+    question: string; // String!
+    title: string; // String!
+  }
+  Flip: { // root type
+    link: NexusGenRootTypes['Link']; // Link!
+    user: NexusGenRootTypes['User']; // User!
   }
   Link: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -67,14 +90,14 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Query: {};
+  Read: { // root type
+    flashCard: NexusGenRootTypes['FlashCard']; // FlashCard!
+    user: NexusGenRootTypes['User']; // User!
+  }
   User: { // root type
     email: string; // String!
     id: number; // Int!
     name: string; // String!
-  }
-  Vote: { // root type
-    link: NexusGenRootTypes['Link']; // Link!
-    user: NexusGenRootTypes['User']; // User!
   }
 }
 
@@ -93,38 +116,64 @@ export interface NexusGenFieldTypes {
     token: string; // String!
     user: NexusGenRootTypes['User']; // User!
   }
+  Category: { // field return type
+    flashCards: Array<NexusGenRootTypes['FlashCard'] | null> | null; // [FlashCard]
+    id: number; // Int!
+    name: string; // String!
+  }
   Feed: { // field return type
     count: number; // Int!
     id: string | null; // ID
     links: NexusGenRootTypes['Link'][]; // [Link!]!
   }
+  FlashCard: { // field return type
+    answer: string; // String!
+    category: NexusGenRootTypes['Category'] | null; // Category
+    categoryId: number; // Int!
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    createdBy: NexusGenRootTypes['User'] | null; // User
+    hardness: string; // String!
+    id: number; // Int!
+    question: string; // String!
+    readers: NexusGenRootTypes['User'][]; // [User!]!
+    title: string; // String!
+  }
+  Flip: { // field return type
+    link: NexusGenRootTypes['Link']; // Link!
+    user: NexusGenRootTypes['User']; // User!
+  }
   Link: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
     description: string; // String!
+    flipers: NexusGenRootTypes['User'][]; // [User!]!
     id: number; // Int!
     postedBy: NexusGenRootTypes['User'] | null; // User
     url: string; // String!
-    voters: NexusGenRootTypes['User'][]; // [User!]!
   }
   Mutation: { // field return type
+    createCategory: NexusGenRootTypes['Category'] | null; // Category
+    createFlashCard: NexusGenRootTypes['FlashCard']; // FlashCard!
+    flip: NexusGenRootTypes['Flip'] | null; // Flip
     login: NexusGenRootTypes['AuthPayload']; // AuthPayload!
     post: NexusGenRootTypes['Link']; // Link!
+    read: NexusGenRootTypes['Read'] | null; // Read
     signup: NexusGenRootTypes['AuthPayload']; // AuthPayload!
-    vote: NexusGenRootTypes['Vote'] | null; // Vote
   }
   Query: { // field return type
+    categories: NexusGenRootTypes['Category'][]; // [Category!]!
     feed: NexusGenRootTypes['Feed']; // Feed!
+    flashCards: Array<NexusGenRootTypes['FlashCard'] | null> | null; // [FlashCard]
+  }
+  Read: { // field return type
+    flashCard: NexusGenRootTypes['FlashCard']; // FlashCard!
+    user: NexusGenRootTypes['User']; // User!
   }
   User: { // field return type
     email: string; // String!
+    flips: NexusGenRootTypes['Link'][]; // [Link!]!
     id: number; // Int!
     links: NexusGenRootTypes['Link'][]; // [Link!]!
     name: string; // String!
-    votes: NexusGenRootTypes['Link'][]; // [Link!]!
-  }
-  Vote: { // field return type
-    link: NexusGenRootTypes['Link']; // Link!
-    user: NexusGenRootTypes['User']; // User!
   }
 }
 
@@ -133,43 +182,82 @@ export interface NexusGenFieldTypeNames {
     token: 'String'
     user: 'User'
   }
+  Category: { // field return type name
+    flashCards: 'FlashCard'
+    id: 'Int'
+    name: 'String'
+  }
   Feed: { // field return type name
     count: 'Int'
     id: 'ID'
     links: 'Link'
   }
+  FlashCard: { // field return type name
+    answer: 'String'
+    category: 'Category'
+    categoryId: 'Int'
+    createdAt: 'DateTime'
+    createdBy: 'User'
+    hardness: 'String'
+    id: 'Int'
+    question: 'String'
+    readers: 'User'
+    title: 'String'
+  }
+  Flip: { // field return type name
+    link: 'Link'
+    user: 'User'
+  }
   Link: { // field return type name
     createdAt: 'DateTime'
     description: 'String'
+    flipers: 'User'
     id: 'Int'
     postedBy: 'User'
     url: 'String'
-    voters: 'User'
   }
   Mutation: { // field return type name
+    createCategory: 'Category'
+    createFlashCard: 'FlashCard'
+    flip: 'Flip'
     login: 'AuthPayload'
     post: 'Link'
+    read: 'Read'
     signup: 'AuthPayload'
-    vote: 'Vote'
   }
   Query: { // field return type name
+    categories: 'Category'
     feed: 'Feed'
+    flashCards: 'FlashCard'
+  }
+  Read: { // field return type name
+    flashCard: 'FlashCard'
+    user: 'User'
   }
   User: { // field return type name
     email: 'String'
+    flips: 'Link'
     id: 'Int'
     links: 'Link'
     name: 'String'
-    votes: 'Link'
-  }
-  Vote: { // field return type name
-    link: 'Link'
-    user: 'User'
   }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
+    createCategory: { // args
+      name: string; // String!
+    }
+    createFlashCard: { // args
+      answer: string; // String!
+      categoryId: number; // Int!
+      hardness?: string | null; // String
+      question: string; // String!
+      title: string; // String!
+    }
+    flip: { // args
+      linkId: number; // Int!
+    }
     login: { // args
       email: string; // String!
       password: string; // String!
@@ -178,13 +266,13 @@ export interface NexusGenArgTypes {
       description: string; // String!
       url: string; // String!
     }
+    read: { // args
+      flashCardId: number; // Int!
+    }
     signup: { // args
       email: string; // String!
       name: string; // String!
       password: string; // String!
-    }
-    vote: { // args
-      linkId: number; // Int!
     }
   }
   Query: {
@@ -193,6 +281,9 @@ export interface NexusGenArgTypes {
       orderBy?: NexusGenInputs['LinkOrderByInput'][] | null; // [LinkOrderByInput!]
       skip?: number | null; // Int
       take?: number | null; // Int
+    }
+    flashCards: { // args
+      orderBy?: NexusGenInputs['FlashcardOrderByInput'][] | null; // [FlashcardOrderByInput!]
     }
   }
 }
